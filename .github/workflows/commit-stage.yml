@@ -25,10 +25,9 @@ jobs:
       - name: Build with maven
         run: mvn --batch-mode --update-snapshots clean package
       # Build the Docker image
-      - name: Build
+      - name: Build docker image
         run: |-
           docker build \
-            --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$IMAGE:$GITHUB_SHA" \
-            --build-arg GITHUB_SHA="$GITHUB_SHA" \
+            --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }} \
       #- name: Build image
       #  run: ./mvnw spring-boot:build-image --imageName ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
