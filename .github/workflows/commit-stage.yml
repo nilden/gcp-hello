@@ -22,9 +22,7 @@ jobs:
           distribution: temurin
           java-version: 17
           cache: maven
-      - name: Build, tests
+      - name: Build with maven
         run: mvn --batch-mode --update-snapshots clean package
-     # - name: Build container image
-     #   run: |
-     #     chmod +x gradlew bootBuildImage \
-     #      --imageName ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+      - name: Build image
+        run: ./mvnw spring-boot:build-image --imageName ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
