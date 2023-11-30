@@ -15,17 +15,16 @@ jobs:
       security-events: write
     steps:
       - name: Checkout source code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           distribution: temurin
           java-version: 17
           cache: maven
-      - name: Build, unit tests and integration tests
-        run: |
-          chmod +x mvw ./mvnw clean package
-      - name: Build container image
-        run: |
-          chmod +x gradlew bootBuildImage \
-            --imageName ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+      - name: Build, tests
+        run: mvn --batch-mode --update-snapshots clean package
+     # - name: Build container image
+     #   run: |
+     #     chmod +x gradlew bootBuildImage \
+     #      --imageName ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
