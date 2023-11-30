@@ -1,0 +1,31 @@
+name: Commit Stage
+on: push
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: gcp/hello-world
+  VERSION: ${{ github.sha }}
+
+jobs:
+  build:
+    name: Build and Test
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: gradle
+      - name: Build, unit tests and integration tests
+        run: |
+          chmod +x mvw ./mvnw clean package
+      - name: Build container image
+        run: |
+          chmod +x gradlew bootBuildImage \
+            --imageName ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
